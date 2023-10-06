@@ -1,0 +1,60 @@
+version: '3.9'
+
+services:
+  mysql:
+    container_name: mysqldb
+    image: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./backend/mysql/db:/docker-entrypoint-initdb.d
+      - ./backend/mysql/conf.d:/etc/mysql/conf.d
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  api:
+    container_name: "api"
+    depends_on:
+      - mysql
+    build:
+      context: ./backend
+      dockerfile: Dockerfile 
+    volumes:
+      - ./backend:/app
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+  
+  react:
+    container_name: "react"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    depends_on:
+      - api
+  
+  # nginx:
+  #   container_name: "nginx"
+  #   build: 
+  #     context: .
+  #     dockerfile: ./nginx/Dockerfile
+  #     args:
+  #         - NGINX_CONF=nginx/nginx.conf
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #     - api
+  #     - react
+
+
+volumes:
+  pgdata: {}
