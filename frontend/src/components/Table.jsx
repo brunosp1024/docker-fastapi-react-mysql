@@ -79,10 +79,6 @@ const Table = () => {
     setActiveModalDelete(!activeModalDelete);
     getPersons(currentPage);
     setId(null);
-    toast.success(
-      'Excluido com sucesso',
-      { autoClose: 2000 }
-  )
   };
 
   return (

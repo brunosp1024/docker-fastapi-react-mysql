@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 
 const ConfirmDeleteModal = ({ active, id, handleModal, setErrorMessage }) => {
 
@@ -14,6 +15,10 @@ const ConfirmDeleteModal = ({ active, id, handleModal, setErrorMessage }) => {
             setErrorMessage("Falha ao deletar o item");
         } else {
             handleModal()
+            toast.success(
+              'Excluido com sucesso',
+              { autoClose: 2000 }
+            )
         }
     }
 
