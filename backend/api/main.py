@@ -26,10 +26,10 @@ app.add_middleware(
 )
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def main():
     return RedirectResponse(url="/api",)
 
-@app.get("/api", tags=["root"])
+@app.get("/api", include_in_schema=False)
 async def read_root() -> dict:
     return {"message": "Welcome to api."}
