@@ -23,7 +23,7 @@ class TestPersonEndpoints:
     def test_list_all_persons(self, object_created, client):
         response = client.get(self.endpoint)
         assert response.status_code == 200
-        assert len(json.loads(response.content)) == 1
+        assert len(json.loads(response.content)['items']) == 1
 
 
     def test_retrieve_one_person(self, client, object_created):
