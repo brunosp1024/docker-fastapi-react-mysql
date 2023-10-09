@@ -36,7 +36,7 @@ const PersonModal = ({ active, handleModal, id, setErrorMessage }) => {
 
     cleanFormData();
 
-    if (id) {
+    if (id && active) {
       getPerson();
     }
   }, [id]);
@@ -129,7 +129,7 @@ const PersonModal = ({ active, handleModal, id, setErrorMessage }) => {
       <div className="modal-card">
         <header className="modal-card-head has-background-primary-light">
           <h1 className="modal-card-title">
-            {id ? "Atualizar pessoa" : "Cadastrar nova pessoa"}
+            {id ? "Atualizar dados de registro" : "Adicionar registro"}
           </h1>
         </header>
         <section className="modal-card-body">
