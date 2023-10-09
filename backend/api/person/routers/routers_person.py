@@ -1,16 +1,22 @@
 from api.person.services import services_person as _services
 from api.database import database as _database
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from fastapi import status, Depends, HTTPException
 from sqlalchemy.orm import Session
 from api.person.schemas.schemas_person import PersonResponse, PersonRequest
+from fastapi_pagination import Page, paginate
 
+
+Page = Page.with_custom_options(
+    size=Query(5, ge=1, le=100),
+)
 
 api = APIRouter()
 
-@api.get("/api/pessoas", response_model=list[PersonResponse])
+@api.get("/api/pessoas", response_model=Page[PersonResponse])
 async def get_persons(db: Session = Depends(_database.get_db)):
-    return await _services.get_persons(db=db)
+    persons = await _services.get_persons(db=db)
+    return paginate(persons)
 
 
 @api.post("/api/pessoas", response_model=PersonResponse,  status_code=status.HTTP_201_CREATED)

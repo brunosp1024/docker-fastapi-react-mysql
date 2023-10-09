@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 
+from fastapi_pagination import add_pagination
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from api.person.routers.routers_person import api as api_person
 
 
 app = FastAPI(docs_url="/api/docs")
+add_pagination(app)
 
 app.include_router(api_person)
 
