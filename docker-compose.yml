@@ -41,19 +41,6 @@ services:
     restart: unless-stopped
     depends_on:
       - api
-  
-  # nginx:
-  #   container_name: "nginx"
-  #   build: 
-  #     context: .
-  #     dockerfile: ./nginx/Dockerfile
-  #     args:
-  #         - NGINX_CONF=nginx/nginx.conf
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #     - api
-  #     - react
 
 
 volumes:
