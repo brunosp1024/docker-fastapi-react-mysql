@@ -1,13 +1,14 @@
 import 'moment/locale/pt-br'
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { FaUserPlus, FaUsers, FaEdit, FaTrash } from "react-icons/fa";
+import { FaUserPlus, FaUsers, FaEdit, FaTrash, FaRegEye } from "react-icons/fa";
 import { Pagination } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import ErrorMessage from "./ErrorMessage";
+import PersonViewModal from "./PersonViewModal";
 import PersonModal from "./PersonModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
@@ -18,6 +19,7 @@ const Table = () => {
   const [loaded, setLoaded] = useState(false);
   const [activeModal, setActiveModal] = useState(false);
   const [activeModalDelete, setActiveModalDelete] = useState(false);
+  const [activeModalView, setActiveModalView] = useState(false);
   const [id, setId] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +35,11 @@ const Table = () => {
   const handleDelete = async (id) => {
     setId(id);
     setActiveModalDelete(true);
+  };
+
+  const handleView = async (id) => {
+    setId(id);
+    setActiveModalView(true);
   };
 
   const getPersons = async (page=1) => {
@@ -81,6 +88,11 @@ const Table = () => {
     setId(null);
   };
 
+  const handleModalView = () => {
+    setActiveModalView(!activeModalView);
+    setId(null);
+  };
+
   return (
     <>
       <ToastContainer />
@@ -93,6 +105,12 @@ const Table = () => {
       <ConfirmDeleteModal 
         active={activeModalDelete} 
         handleModal={handleModalDelete}
+        setErrorMessage={setErrorMessage}
+        id={id}
+      />
+      <PersonViewModal
+        active={activeModalView} 
+        handleModal={handleModalView}
         setErrorMessage={setErrorMessage}
         id={id}
       />
@@ -133,6 +151,14 @@ const Table = () => {
                 <td>{moment(person.data_admissao).format("DD/MM/Y")}</td>
                 <td>{person.funcao}</td>
                 <td>
+                  <Tooltip title="Ver mais" placement="top-start">
+                    <button
+                      className="button mr-2 is-success is-light"
+                      onClick={() => handleView(person.id_pessoa)}
+                    >
+                        <FaRegEye />
+                    </button>
+                  </Tooltip>
                   <Tooltip title="Editar" placement="top-start">
                     <button
                       className="button mr-2 is-info is-light"
