@@ -103,7 +103,10 @@ const PersonModal = ({ active, handleModal, id, setErrorMessage }) => {
     };
 
     if (!cpf.isValid(cpfPerson)){
-      toast.error('Número de CPF inválido.')
+      toast.error(
+        'Número de CPF inválido.',
+        { autoClose: 2000 }
+      )
       return
     }
 
