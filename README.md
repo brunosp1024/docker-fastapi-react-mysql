@@ -39,14 +39,24 @@ cp .env.example .env
 ```shell script
 docker-compose up
 ```
+***
 
-### 5. Acessando o sistema no navegador:
+## Acessando o sistema no navegador:
 
-#### Para acessar a interface do sistema, basta digitar o seguinte endereço:
+### Para acessar a interface do sistema, basta digitar o seguinte endereço:
 
     http://localhost:3000/
 
-#### Para ver a documentação da api e seus endpoints, acessar o endereço:
+### Para ver a documentação da api e seus endpoints, acessar o endereço:
 
     http://localhost:8000/api/docs
+
+***
+
+## Executando os testes 💡
+
+```shell script
+docker-compose exec api pytest
+```
+
 
