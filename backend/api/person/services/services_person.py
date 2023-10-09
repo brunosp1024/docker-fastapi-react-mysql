@@ -8,7 +8,7 @@ from api.person.schemas.schemas_person import PersonRequest
 
 
 async def get_persons(db: _orm.Session):
-    persons = db.query(Pessoa)
+    persons = db.query(Pessoa).order_by('nome')
     return [person for person in persons]
 
 
