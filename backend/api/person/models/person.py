@@ -13,6 +13,6 @@ class Pessoa(_database.Base):
     cpf = _sql.Column(_sql.String(100), unique=True, index=True)
     data_nascimento = _sql.Column(_sql.Date)
     data_admissao = _sql.Column(_sql.Date)
-    funcao = _sql.Column(_sql.String(100), nullable=True)
+    funcao = _sql.Column(_sql.String(100), nullable=True, default='---')
 
 
