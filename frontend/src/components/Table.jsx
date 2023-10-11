@@ -1,10 +1,10 @@
 import 'moment/locale/pt-br'
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { FaUserPlus, FaUsers, FaEdit, FaTrash, FaRegEye } from "react-icons/fa";
+import { FaUserPlus, FaUsers, FaEdit, FaTrash, FaRegEye, FaSearch } from "react-icons/fa";
 import { Pagination } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 import ErrorMessage from "./ErrorMessage";
@@ -21,10 +21,10 @@ const Table = () => {
   const [activeModalDelete, setActiveModalDelete] = useState(false);
   const [activeModalView, setActiveModalView] = useState(false);
   const [id, setId] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [count, setCount] = useState(0);
   const [pageItems, setPageItems] = useState(null);
+  const [search, setSearch] = useState("");
   
   
   const handleUpdate = async (id) => {
@@ -42,7 +42,7 @@ const Table = () => {
     setActiveModalView(true);
   };
 
-  const getPersons = async (page=1) => {
+  const getPersons = async (page=1, search='') => {
     const requestOptions = {
       method: "GET",
       mode: 'no-cors',
@@ -50,11 +50,17 @@ const Table = () => {
         "Content-Type": "application/json",
       },
     };
-    let url = "/api/pessoas"
-    if (page > 1){
-      url = `/api/pessoas?page=${page}`
+
+    const baseApiUrl = "/api/pessoas";
+    let url = `${baseApiUrl}?page=${page}`;
+
+    if (search) {
+      url += `&search=${search}`;
     }
+  
+
     const response = await fetch(url, requestOptions);
+
     if (!response.ok) {
       setErrorMessage("Não foi possível carregar a lista de pessoas.");
     } else {
@@ -69,7 +75,7 @@ const Table = () => {
   };
 
   const handleChangePage = (event, newPage) => {
-    getPersons(newPage)
+    getPersons(newPage, search)
   };
 
   useEffect(() => {
@@ -92,6 +98,14 @@ const Table = () => {
     setActiveModalView(!activeModalView);
     setId(null);
   };
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter'){
+      setSearch(e.target.value)
+      getPersons(1, e.target.value);
+    }
+
+  }
 
   return (
     <>
@@ -121,12 +135,22 @@ const Table = () => {
         <FaUsers className="has-background-primary is-size-1 has-text-white p-2 box"/>
       </div>
       <hr className="mt-1"/>
-      <button
-        className="button mb-5 is-info"
-        onClick={() => setActiveModal(true)}
-      >
-        Cadastrar <FaUserPlus className="ml-2"/>
-      </button>
+      <div className='is-flex is-flex is-align-items-center is-justify-content-space-between mb-3 columns mx-1'>
+        <button
+          className="button is-info"
+          onClick={() => setActiveModal(true)}
+        >
+          Cadastrar <FaUserPlus className="ml-2"/>
+        </button>
+        <div className="panel-block column is-one-third" style={{'border': 0}}>
+          <p className="control has-icons-left">
+            <input className="input" type="text" placeholder="Pesquisar" onKeyDown={handleSearch}></input>
+            <span className="icon is-left">
+              <FaSearch />
+            </span>
+          </p>
+        </div>
+      </div>
       <ErrorMessage message={errorMessage} />
       {loaded && persons ? (
         <table className="table is-fullwidth p-0 m-0 box" style={{lineHeight: "45px", display: "table"}}>

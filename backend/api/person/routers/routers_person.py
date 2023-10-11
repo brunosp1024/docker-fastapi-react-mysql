@@ -1,7 +1,6 @@
 from api.person.services import services_person as _services
 from api.database import database as _database
-from fastapi import APIRouter, Query
-from fastapi import status, Depends, HTTPException
+from fastapi import APIRouter, Query, status, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from api.person.schemas.schemas_person import PersonResponse, PersonRequest
 from fastapi_pagination import Page, paginate
@@ -14,8 +13,9 @@ Page = Page.with_custom_options(
 api = APIRouter()
 
 @api.get("/api/pessoas", response_model=Page[PersonResponse])
-async def get_persons(db: Session = Depends(_database.get_db)):
-    persons = await _services.get_persons(db=db)
+async def get_persons(request: Request, db: Session = Depends(_database.get_db)):
+    search = request.query_params.get('search')
+    persons = await _services.get_persons(search, db=db)
     return paginate(persons)
 
 
