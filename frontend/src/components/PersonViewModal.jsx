@@ -82,7 +82,7 @@ const PersonViewModal = ({ active, handleModal, id, setErrorMessage }) => {
             <div className="field">
               <label className="label">Função</label>
               <div className="control">
-                <p className="has-background-light py-2 px-2">{funcao}</p>
+                <p className="has-background-light py-2 px-2" style={{'height': '40px'}}>{funcao}</p>
               </div>
             </div>
           </form>
