@@ -15,7 +15,8 @@ api = APIRouter()
 @api.get("/api/pessoas", response_model=Page[PersonResponse])
 async def get_persons(request: Request, db: Session = Depends(_database.get_db)):
     search = request.query_params.get('search')
-    persons = await _services.get_persons(search, db=db)
+    sort = request.query_params.get('sort')
+    persons = await _services.get_persons(search=search, sort=sort, db=db)
     return paginate(persons)
 
 

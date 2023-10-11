@@ -11,6 +11,7 @@ import ErrorMessage from "./ErrorMessage";
 import PersonViewModal from "./PersonViewModal";
 import PersonModal from "./PersonModal";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import SortData from "./SortData";
 
 
 const Table = () => {
@@ -25,6 +26,7 @@ const Table = () => {
   const [count, setCount] = useState(0);
   const [pageItems, setPageItems] = useState(null);
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
   
   
   const handleUpdate = async (id) => {
@@ -42,7 +44,7 @@ const Table = () => {
     setActiveModalView(true);
   };
 
-  const getPersons = async (page=1, search='') => {
+  const getPersons = async (page=1, search='', sort='') => {
     const requestOptions = {
       method: "GET",
       mode: 'no-cors',
@@ -58,6 +60,9 @@ const Table = () => {
       url += `&search=${search}`;
     }
   
+    if (sort) {
+      url += `&sort=${sort}`;
+    }
 
     const response = await fetch(url, requestOptions);
 
@@ -75,7 +80,7 @@ const Table = () => {
   };
 
   const handleChangePage = (event, newPage) => {
-    getPersons(newPage, search)
+    getPersons(newPage, search, sort)
   };
 
   useEffect(() => {
@@ -104,8 +109,12 @@ const Table = () => {
       setSearch(e.target.value)
       getPersons(1, e.target.value);
     }
-
   }
+
+  const handleSort = (sort) => {
+    setSort(sort)
+    getPersons(1, search, sort)
+  };
 
   return (
     <>
@@ -144,12 +153,13 @@ const Table = () => {
         </button>
         <div className="panel-block column is-one-third" style={{'border': 0}}>
           <p className="control has-icons-left">
-            <input className="input" type="text" placeholder="Pesquisar" onKeyDown={handleSearch}></input>
+            <input className="input" type="text" placeholder="Pesquise por nome ou CPF" onKeyDown={handleSearch}></input>
             <span className="icon is-left">
               <FaSearch />
             </span>
           </p>
         </div>
+        <SortData handleSort={handleSort} sort={sort}/>
       </div>
       <ErrorMessage message={errorMessage} />
       {loaded && persons ? (

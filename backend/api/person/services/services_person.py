@@ -7,11 +7,14 @@ from api.person.models import Pessoa
 from api.person.schemas.schemas_person import PersonRequest
 
 
-async def get_persons(search: None, db: _orm.Session):
+async def get_persons(search, sort, db: _orm.Session):
     if search:
-        persons = db.query(Pessoa).filter(Pessoa.nome.contains(search)).order_by('nome')
+        persons = db.query(Pessoa).filter(
+            Pessoa.nome.contains(search) | Pessoa.cpf.contains(search)
+        ).order_by(sort)
     else:
-        persons = db.query(Pessoa).order_by('nome')
+        persons = db.query(Pessoa).order_by(sort)
+
     return [person for person in persons]
 
 
